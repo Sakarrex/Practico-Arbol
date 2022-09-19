@@ -57,11 +57,10 @@ class ArbolBinario:
                                 NodoBorrar.setValor(NodoBorrar.getDerecho().getValor())
                                 NodoBorrar.setDerecho(None)
                         else:
-                            if self.__raiz != None:
-                                if self.__raiz.getIzquierdo()!= None and self.__raiz.getIzquierdo().getValor() == valor:
-                                    self.__raiz = self.__raiz.getIzquierdo()
-                                else:
-                                    self.__raiz = self.__raiz.getDerecho()
+                            if self.__raiz.getIzquierdo()!= None:
+                                self.__raiz = self.__raiz.getIzquierdo()
+                            else:
+                                self.__raiz = self.__raiz.getDerecho()
 
                         
                     elif grado == 2:
