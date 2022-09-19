@@ -1,4 +1,3 @@
-
 from ArbolBinario import ArbolBinario
 
 if __name__ == "__main__":
@@ -9,8 +8,12 @@ if __name__ == "__main__":
     UnArbol.Insertar(UnArbol.getRaiz(),10)
     UnArbol.Insertar(UnArbol.getRaiz(),3)
     UnArbol.Insertar(UnArbol.getRaiz(),7)
+    UnArbol.Insertar(UnArbol.getRaiz(),8)
     UnArbol.Insertar(UnArbol.getRaiz(),12)
     UnArbol.Insertar(UnArbol.getRaiz(),15)
     UnArbol.PreOrden(UnArbol.getRaiz())
+    
     print("------------------------------")
-    print(UnArbol.getMenorMayores(UnArbol.getRaiz()))
+    print("Nivel: " + str(UnArbol.nivelNodo(15)))
+    
+    

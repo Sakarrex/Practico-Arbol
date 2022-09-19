@@ -1,3 +1,4 @@
+from ast import Return
 from NodoArbol import NodoArbol
 
 class ArbolBinario:
@@ -27,29 +28,75 @@ class ArbolBinario:
                     self.Insertar(SubArbol.getDerecho(),valor)
 
             
-    def Suprimir(self,NodoActual,valor):
+    def Suprimir(self,valor):
         if self.__raiz == None:
             print("Arbol vacio")
         else:
-            if NodoActual.getValor() > valor:
-                grado = self.getGrado(NodoActual)
-                if grado == 0:
-                    NodoActual = None
-                elif grado == 1:
-                    if NodoActual.getIzquierdo() != None:
-                        NodoActual.setValor(NodoActual.getIzquierdo().getValor())
-                        NodoActual.setIzquierdo(None)
-                    elif NodoActual.getDerecho() != None:
-                        NodoActual.setValor(NodoActual.getDerecho().getValor())
-                        NodoActual.setDerecho(None)
-                elif grado == 2:
-                    valor = self.getMenorMayores(self.__raiz)
-                    NodoActual.setValor(valor)
-            else:
-                if NodoActual.getValor() > valor:
-                    self.Suprimir(NodoActual.getIzquierdo(),valor)
-                elif NodoActual.getValor() < valor:
-                    self.Suprimir(NodoActual.getDerecho(),valor)
+            NodoBorrar = self.Buscar(self.__raiz,valor)
+            if NodoBorrar != None:
+                if NodoBorrar.getValor() == valor:
+                    grado = self.getGrado(NodoBorrar)
+                    Padre = self.getPadre(self.__raiz,NodoBorrar.getValor())
+
+                    if grado == 0:
+                        if Padre == None:
+                            self.__raiz = None
+                        else:
+                            if Padre.getIzquierdo()!= None and Padre.getIzquierdo().getValor() == valor:
+                                Padre.setIzquierdo(None)
+                            else:
+                                Padre.setDerecho(None)
+                            
+                    elif grado == 1:
+                        if Padre != None:
+                            print("Padre: " + str(Padre.getValor()))
+                            if NodoBorrar.getIzquierdo()!= None and NodoBorrar.getIzquierdo().getValor() == valor:
+                                NodoBorrar.setValor(NodoBorrar.getIzquierdo().getValor())
+                                NodoBorrar.setIzquierdo(None)
+                            else:
+                                NodoBorrar.setValor(NodoBorrar.getDerecho().getValor())
+                                NodoBorrar.setDerecho(None)
+                        else:
+                            if self.__raiz != None:
+                                if self.__raiz.getIzquierdo()!= None and self.__raiz.getIzquierdo().getValor() == valor:
+                                    self.__raiz = self.__raiz.getIzquierdo()
+                                else:
+                                    self.__raiz = self.__raiz.getDerecho()
+
+                        
+                    elif grado == 2:
+                        
+                        NodoInfimo = self.getMenorMayores(NodoBorrar.getDerecho())
+                        gradoInfimo = self.getGrado(NodoInfimo)
+                        PadreInfimo = self.getPadre(self.__raiz,NodoInfimo.getValor())
+                        if gradoInfimo == 1:
+                            
+                            print("Padre Infimo: " + str(PadreInfimo.getValor()))
+                            if PadreInfimo.getIzquierdo() != None and PadreInfimo.getIzquierdo().getValor() == NodoInfimo.getValor():
+                                PadreInfimo.setIzquierdo(NodoInfimo.getDerecho())
+                            else:
+                                PadreInfimo.setDerecho(NodoInfimo.getDerecho())
+                            
+                        elif gradoInfimo == 0:
+                            if PadreInfimo.getIzquierdo() != None and PadreInfimo.getIzquierdo().getValor() == NodoInfimo.getValor():
+                                PadreInfimo.setIzquierdo(None)
+                            else:
+                                PadreInfimo.setDerecho(None)
+
+
+                        NodoBorrar.setValor(NodoInfimo.getValor())
+                            
+                            
+                        
+                        
+
+                        
+
+
+                        
+
+                        
+                    
 
                     
                 
@@ -86,18 +133,73 @@ class ArbolBinario:
             grado = 2
         return grado
     
-    def getMenorMayores(self,NodoActual,nivelActual=1):
-        if nivelActual == 1:
-            self.getMenorMayores(NodoActual.getDerecho(),nivelActual+1)
-        elif nivelActual >= 2:
+    def getMenorMayores(self,NodoActual):
             if NodoActual.getIzquierdo() != None:
-                self.getMenorMayores(NodoActual.getIzquierdo(),nivelActual+1)
+                return self.getMenorMayores(NodoActual.getIzquierdo())
             else:
-                valor = NodoActual.getValor()
-                NodoActual = None
-                return valor
+                return NodoActual
         
 
-        
+    def getPadre(self,NodoActual,valor):
+        if self.__raiz != None and self.__raiz.getValor() == valor:
+            return None
+        else:
+            if NodoActual.getIzquierdo() != None and NodoActual.getIzquierdo().getValor() == valor:
+                return NodoActual
+            elif NodoActual.getDerecho() != None and NodoActual.getDerecho().getValor() == valor:
+                return NodoActual
+            elif valor < NodoActual.getValor():
+                return self.getPadre(NodoActual.getIzquierdo(),valor)
+            elif valor > NodoActual.getValor():
+                return self.getPadre(NodoActual.getDerecho(),valor)
 
+    def Buscar(self,nodoActual,valor):
+        if nodoActual == None:
+            return None
+        elif nodoActual.getValor() == valor:
+            return nodoActual
+        elif valor < nodoActual.getValor():
+            return self.Buscar(nodoActual.getIzquierdo(),valor)
+        else:
+            return self.Buscar(nodoActual.getDerecho(),valor)
+        
+            
+    def getFrontera(self,NodoActual):
+        if NodoActual != None:
+            if self.getGrado(NodoActual) == 0:
+                print(NodoActual.getValor())
+            self.getFrontera(NodoActual.getIzquierdo())
+            self.getFrontera(NodoActual.getDerecho())
+    
+    def esHijo(self,ValorPadre,ValorHijo):
+        Padre = self.Buscar(self.__raiz,ValorPadre)
+        if Padre != None:
+            if ValorHijo < ValorPadre:
+                return Padre.getIzquierdo().getValor() == ValorHijo
+            else:
+                return Padre.getDerecho().getValor() == ValorHijo
+        
+    def getCamino(self,ValorInicio,ValorFin):
+        NodoInicio = self.Buscar(self.__raiz,ValorInicio)
+        if NodoInicio != None:
+            NodoFin = self.Buscar(NodoInicio,ValorFin)
+            if NodoFin != None:
+                print("Existe Camino")
+            else:
+                print("No existe el camino")
+        else:
+            print("Nodo Incial no encontrado")
+            
+    def nivelNodo(self,valor):
+        aux = self.__raiz
+        Nivel = 0
+        while aux != None:
+            if aux.getValor() == valor:
+                aux = None
+            elif valor < aux.getValor():
+                aux = aux.getIzquierdo()
+            else:
+                aux = aux.getDerecho()
+            Nivel +=1
+        return Nivel
         
