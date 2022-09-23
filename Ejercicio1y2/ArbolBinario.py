@@ -49,13 +49,19 @@ class ArbolBinario:
                             
                     elif grado == 1:
                         if Padre != None:
-                            print("Padre: " + str(Padre.getValor()))
-                            if NodoBorrar.getIzquierdo()!= None and NodoBorrar.getIzquierdo().getValor() == valor:
-                                NodoBorrar.setValor(NodoBorrar.getIzquierdo().getValor())
-                                NodoBorrar.setIzquierdo(None)
+                            
+                            if Padre.getValor() > NodoBorrar.getValor():
+                                if NodoBorrar.getizquerido()!= None:
+                                    Padre.setIzquierdo(NodoBorrar.getIzquierdo()) 
+                                else:
+                                    Padre.setIzquierdo(NodoBorrar.getDerecho()) 
+                                
                             else:
-                                NodoBorrar.setValor(NodoBorrar.getDerecho().getValor())
-                                NodoBorrar.setDerecho(None)
+                                if NodoBorrar.getizquerido()!= None:
+                                    Padre.setDerecho(NodoBorrar.getIzquierdo()) 
+                                else:
+                                    Padre.setDerecho(NodoBorrar.getDerecho()) 
+                                
                         else:
                             if self.__raiz.getIzquierdo()!= None:
                                 self.__raiz = self.__raiz.getIzquierdo()
@@ -201,4 +207,28 @@ class ArbolBinario:
                 aux = aux.getDerecho()
             Nivel +=1
         return Nivel
+    
+    def CantoNodos(self,SubArbol):
+        if self.__raiz == None:
+            return 0
+        elif SubArbol == None:
+            return 0
+        else:
+            return 1 + self.CantoNodos(SubArbol.getIzquierdo()) + self.CantoNodos(SubArbol.getDerecho())
+
+    def getAlturaArbol(self,subArbol,max = 1):
+        if subArbol != None:
+            nivel = self.nivelNodo(subArbol.getValor())
+            if max < nivel:
+                max = nivel 
+            max = self.getAlturaArbol(subArbol.getIzquierdo(),max)
+            max = self.getAlturaArbol(subArbol.getDerecho(),max)
+        return max
         
+    def getSucesores(self,valor):
+        Nodo = self.Buscar(self.__raiz,valor)
+        if Nodo != None:
+            self.InOrden(Nodo.getIzquierdo())
+            self.InOrden(Nodo.getDerecho())
+        
+    
