@@ -91,21 +91,7 @@ class ArbolBinario:
 
                         NodoBorrar.setValor(NodoInfimo.getValor())
                             
-                            
-                        
-                        
-
-                        
-
-
-                        
-
-                        
-                    
-
-                    
-                
-            
+ 
         
     def InOrden(self,SubArbol):
         if SubArbol != None:
