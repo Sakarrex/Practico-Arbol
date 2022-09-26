@@ -7,7 +7,7 @@ class ArbolDeHuffman:
 
     def __init__(self) -> None:
         listaNodos = []
-        archivo = open("C:\\Users\\Usuario\\Desktop\\Estructura de datos y algoritmos\\Practico-Arbol\\Ejercicio4\\texto.txt", "r")
+        archivo = open("texto.txt", "r")
         texto = ""
         for line in archivo:
             texto += line
